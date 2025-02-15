@@ -23,11 +23,11 @@ install:
 
 script:
   - platformio run --environment=$PLATFORMIO_ENV
-  - scripts/stylecheck
+  - scripts/stylecheck.sh
   - git diff --exit-code
 
 before_deploy:
-  - scripts/before_deploy
+  - scripts/before_deploy.sh
 deploy:
   provider: releases
   prerelease: true
