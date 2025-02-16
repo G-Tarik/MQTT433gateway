@@ -58,5 +58,7 @@ def generate_file():
         f.write(TEMPLATE.format(version=escape_string(get_fw_version()),
                                 build_with=escape_string(get_dependencies_json())))
 
+    subprocess.check_output(["scripts/release.sh"])
+
 
 generate_file()

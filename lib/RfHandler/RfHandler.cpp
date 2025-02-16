@@ -131,11 +131,13 @@ void RfHandler::onRfCode(const String &protocol, const String &message,
 void RfHandler::onRfRaw(const uint16_t *pulses, size_t length) {
   if (rawMode) {
     String data = rf.pulseTrainToString(pulses, length);
-    if (data.length() > 0) {
+    if (data.length() > 64) {
       Logger.info.print(F("RAW RF signal ("));
       Logger.info.print(length);
       Logger.info.print(F("): "));
       Logger.info.println(data);
+      if (!onReceiveCallback) return;
+      onReceiveCallback("RAW", data);
     }
   }
 }
