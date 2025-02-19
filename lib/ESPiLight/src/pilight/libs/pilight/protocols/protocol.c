@@ -34,7 +34,7 @@ void protocol_init(void) {
 
 void protocol_register(protocol_t **proto) {
   if((*proto = MALLOC(sizeof(struct protocol_t))) == NULL) {
-    fprintf(stderr, "out of memory\n");
+    fprintf(stderr, "protocol_register: out of memory\n");
     exit(EXIT_FAILURE);
   }
   //(*proto)->options = NULL;
@@ -72,7 +72,7 @@ void protocol_register(protocol_t **proto) {
 
   struct protocols_t *pnode = MALLOC(sizeof(struct protocols_t));
   if(pnode == NULL) {
-    fprintf(stderr, "out of memory\n");
+    fprintf(stderr, "protocol_register: out of memory\n");
     exit(EXIT_FAILURE);
   }
   pnode->listener = *proto;

@@ -7,6 +7,7 @@
 .gcc-flags.json
 web/build/
 web/node_modules/
-src/config.h
-dist/version_build.h
 .vscode
+TODO.md
+src/User_config.h.my
+

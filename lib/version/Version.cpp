@@ -31,7 +31,7 @@
 
 #include "Version.h"
 
-#include "../../dist/version_build.h"
+#include "version_build.h"
 
 String fwVersion() { return String(FPSTR(fw_version)); }
 
