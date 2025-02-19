@@ -7,7 +7,15 @@ import json
 import platformio
 from platformio.package.manager.library import LibraryPackageManager
 from platformio.package.manager.platform import PlatformPackageManager
-Import("env")
+
+
+# Try to import `env` only if running in PlatformIO
+try:
+    Import("env")
+    PIO_ENV = True
+except NameError:
+    env = None
+    PIO_ENV = False
 
 OUTFILE = "dist/version_build.h"
 TEMPLATE = """
@@ -53,7 +61,7 @@ def escape_string(text, escape_chars=CHARS_TO_ESCAPE):
     return text
 
 
-def generate_file():
+def generate_file(source, target, env):
     with open(OUTFILE, 'w') as f:
         f.write(TEMPLATE.format(version=escape_string(get_fw_version()),
                                 build_with=escape_string(get_dependencies_json())))
@@ -61,4 +69,11 @@ def generate_file():
     subprocess.check_output(["scripts/release.sh"])
 
 
-generate_file()
+# Register post-action only if running inside PlatformIO
+if PIO_ENV:
+    env.AddPostAction("buildprog", generate_file)
+
+
+if __name__ == "__main__":
+    print("Running in standalone mode ...")
+    # placeholder for future case if such mode is needed

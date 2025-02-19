@@ -53,6 +53,7 @@ char rfReceiverPin[] = "rfReceiverPin";
 char rfTransmitterPin[] = "rfTransmitterPin";
 char rfReceiverPinPullUp[] = "rfReceiverPinPullUp";
 char rfProtocols[] = "rfProtocols";
+char rfRawMinLength[] = "rfRawMinLength";
 char serialLogLevel[] = "serialLogLevel";
 char webLogLevel[] = "webLogLevel";
 char syslogLevel[] = "syslogLevel";
@@ -173,6 +174,7 @@ void Settings::doSerialize(JsonDocument &root, bool sensible) const {
   root[JsonKey::rfTransmitterPin] = this->rfTransmitterPin;
   root[JsonKey::rfReceiverPinPullUp] = this->rfReceiverPinPullUp;
   root[JsonKey::rfProtocols] = serialized(this->rfProtocols);
+  root[JsonKey::rfRawMinLength] = this->rfRawMinLength;
   root[JsonKey::serialLogLevel] = this->serialLogLevel;
   root[JsonKey::webLogLevel] = this->webLogLevel;
   root[JsonKey::syslogLevel] = this->syslogLevel;
@@ -201,38 +203,31 @@ Settings::SettingTypeSet Settings::applyJson(JsonDocument &parsedSettings) {
   Logger.debug.println(F("Applying config settings."));
   SettingTypeSet changed;
 
-  changed.set(BASE, setIfPresent(parsedSettings, JsonKey::deviceName,
-                                 deviceName, notEmpty()));
+  changed.set(BASE, setIfPresent(parsedSettings, JsonKey::deviceName, deviceName, notEmpty()));
   bool pass_before = hasValidPassword();
-  changed.set(WEB_CONFIG, setIfPresent(parsedSettings, JsonKey::configPassword,
-                                       configPassword, notEmpty()));
+  changed.set(WEB_CONFIG, setIfPresent(parsedSettings, JsonKey::configPassword, configPassword, notEmpty()));
   changed.set(
       MQTT, any({changed[BASE],
-                 setIfPresent(parsedSettings, JsonKey::mqttBroker, mqttBroker,
-                              notEmpty()),
-                 setIfPresent(parsedSettings, JsonKey::mqttBrokerPort,
-                              mqttBrokerPort, notZero<uint16_t>()),
+                 setIfPresent(parsedSettings, JsonKey::mqttBroker, mqttBroker, notEmpty()),
+                 setIfPresent(parsedSettings, JsonKey::mqttBrokerPort, mqttBrokerPort, notZero<uint16_t>()),
                  setIfPresent(parsedSettings, JsonKey::mqttUser, mqttUser),
-                 setIfPresent(parsedSettings, JsonKey::mqttPassword,
-                              mqttPassword, notEmpty()),
+                 setIfPresent(parsedSettings, JsonKey::mqttPassword, mqttPassword, notEmpty()),
                  setIfPresent(parsedSettings, JsonKey::mqttRetain, mqttRetain),
-                 setIfPresent(parsedSettings, JsonKey::mqttReceiveTopic,
-                              mqttReceiveTopic, notEmpty()),
-                 setIfPresent(parsedSettings, JsonKey::mqttSendTopic,
-                              mqttSendTopic, notEmpty()),
-                 setIfPresent(parsedSettings, JsonKey::mqttStateTopic,
-                              mqttStateTopic, notEmpty()),
-                 setIfPresent(parsedSettings, JsonKey::mqttVersionTopic,
-                              mqttVersionTopic, notEmpty())}));
-  changed.set(RF_ECHO, (setIfPresent(parsedSettings, JsonKey::rfEchoMessages,
-                                     rfEchoMessages)));
+                 setIfPresent(parsedSettings, JsonKey::mqttReceiveTopic, mqttReceiveTopic, notEmpty()),
+                 setIfPresent(parsedSettings, JsonKey::mqttSendTopic, mqttSendTopic, notEmpty()),
+                 setIfPresent(parsedSettings, JsonKey::mqttStateTopic, mqttStateTopic, notEmpty()),
+                 setIfPresent(parsedSettings, JsonKey::mqttVersionTopic, mqttVersionTopic, notEmpty())}));
+
+  changed.set(RF_ECHO, (setIfPresent(parsedSettings, JsonKey::rfEchoMessages, rfEchoMessages)));
+
   changed.set(
       RF_CONFIG,
       any({setIfPresent(parsedSettings, JsonKey::rfReceiverPin, rfReceiverPin),
-           setIfPresent(parsedSettings, JsonKey::rfTransmitterPin,
-                        rfTransmitterPin),
-           setIfPresent(parsedSettings, JsonKey::rfReceiverPinPullUp,
-                        rfReceiverPinPullUp)}));
+           setIfPresent(parsedSettings, JsonKey::rfTransmitterPin, rfTransmitterPin),
+           setIfPresent(parsedSettings, JsonKey::rfReceiverPinPullUp, rfReceiverPinPullUp),
+           setIfPresent(parsedSettings, JsonKey::rfRawMinLength, rfRawMinLength),
+          }));
+
   if (!parsedSettings[JsonKey::rfProtocols].isNull()) {
     String buff;
     serializeJson(parsedSettings[JsonKey::rfProtocols], buff);
@@ -243,19 +238,18 @@ Settings::SettingTypeSet Settings::applyJson(JsonDocument &parsedSettings) {
   }
   changed.set(
       LOGGING,
-      any({setIfPresent(parsedSettings, JsonKey::serialLogLevel,
-                        serialLogLevel),
+      any({setIfPresent(parsedSettings, JsonKey::serialLogLevel, serialLogLevel),
            setIfPresent(parsedSettings, JsonKey::webLogLevel, webLogLevel)}));
+
   changed.set(
       SYSLOG,
       any({setIfPresent(parsedSettings, JsonKey::syslogLevel, syslogLevel),
            setIfPresent(parsedSettings, JsonKey::syslogHost, syslogHost),
-           setIfPresent(parsedSettings, JsonKey::syslogPort, syslogPort,
-                        notZero<uint16_t>())}));
+           setIfPresent(parsedSettings, JsonKey::syslogPort, syslogPort, notZero<uint16_t>())}));
+
   changed.set(STATUSLED,
               any({setIfPresent(parsedSettings, JsonKey::ledPin, ledPin),
-                   setIfPresent(parsedSettings, JsonKey::ledActiveHigh,
-                                ledActiveHigh)}));
+                   setIfPresent(parsedSettings, JsonKey::ledActiveHigh, ledActiveHigh)}));
 
   if (hasValidPassword() != pass_before) {
     changed.set(MQTT);

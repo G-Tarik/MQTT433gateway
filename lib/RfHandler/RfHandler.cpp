@@ -131,7 +131,7 @@ void RfHandler::onRfCode(const String &protocol, const String &message,
 void RfHandler::onRfRaw(const uint16_t *pulses, size_t length) {
   if (rawMode) {
     String data = rf.pulseTrainToString(pulses, length);
-    if (data.length() > 64) {
+    if (length > settings.rfRawMinLength) {
       Logger.info.print(F("RAW RF signal ("));
       Logger.info.print(length);
       Logger.info.print(F("): "));

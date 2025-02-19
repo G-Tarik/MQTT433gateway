@@ -1,3 +1,13 @@
+
+# Standalone fork
+
+This fork will never be merged into original project as all of MQTT433gateway, ESPLight, Pilight are rather dead - no any reactions from owners of the repositories. That is why the source of ESPLight and Pilight is copied into this repository.
+See [CHANGELOG](CHANGELOG.md) for changes.
+
+
+
+___
+
 [![Build Status](https://travis-ci.org/puuu/MQTT433gateway.svg?branch=master)](https://travis-ci.org/puuu/MQTT433gateway)
 
 # MQTT433gateway

@@ -42,6 +42,7 @@
 #include <SyslogLogTarget.h>
 #include <SystemHeap.h>
 #include <SystemLoad.h>
+#include "User_config.h"
 
 WiFiClient wifi;
 
@@ -204,6 +205,28 @@ void setupStatusLED(const Settings &s) {
 }
 
 void setupWifi() {
+#ifdef ESPWifiManualSetup
+  WiFi.mode(WIFI_STA);
+  WiFi.hostname(settings.deviceName);
+  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
+
+  Logger.info.println(F("Connecting to WiFi..."));
+
+  int retry = 0;
+  while (WiFi.status() != WL_CONNECTED && retry < 30) {  // 30 retries (~15s timeout)
+    delay(500);
+    Logger.info.print(F("."));
+    retry++;
+  }
+
+  if (WiFi.status() == WL_CONNECTED) {
+    Logger.info.println(F("\nConnected to WiFi."));
+  } else {
+    Logger.warning.println(F("\nFailed to connect, rebooting..."));
+    ESP.restart();
+  }
+
+#else
   WiFiManager wifiManager;
   WiFi.hostname(settings.deviceName);
   wifiManager.setConfigPortalTimeout(180);
@@ -224,6 +247,7 @@ void setupWifi() {
     Logger.warning.println(F("Try connecting again after reboot"));
     ESP.restart();
   }
+#endif
 }
 
 void setup() {
@@ -232,7 +256,9 @@ void setup() {
   if (!SPIFFS.begin()) {
     Logger.error.println(F("Initializing of SPIFFS failed!"));
   }
-
+#ifdef ADMIN_PASSWORD
+  settings.configPassword = FPSTR(ADMIN_PASSWORD);
+#endif
   settings.registerChangeHandler(STATUSLED, setupStatusLED);
   settings.registerChangeHandler(BASE, setupMdns);
   settings.registerChangeHandler(MQTT, setupMqtt);

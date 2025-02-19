@@ -34,7 +34,7 @@
 #define MIN_PULSE_LENGTH	261
 #define AVG_PULSE_LENGTH	266
 #define MAX_PULSE_LENGTH	280
-#define RAW_LENGTH				74
+#define RAW_LENGTH			74
 
 typedef struct settings_t {
 	double id;
