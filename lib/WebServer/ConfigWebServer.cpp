@@ -85,7 +85,7 @@ void ConfigWebServer::begin() {
               if (protocolProvider) {
                 server.send(200, FPSTR(APPLICATION_JSON), protocolProvider());
               } else {
-                Logger.warning.println(F("No protocolProvider avaiable."));
+                Logger.warning.println(F("No protocolProvider available."));
                 server.send_P(200, APPLICATION_JSON, PSTR("[]"));
               }
             }));

@@ -53,6 +53,7 @@ $(function () {
         new ConfigItem("rfReceiverPin", pinNumberInputFactory, inputApply, inputGetInt, "The GPIO pin used for the rf receiver"),
         new ConfigItem("rfReceiverPinPullUp", checkboxFactory, checkboxApply, checkboxGet, "Activate pullup on rf receiver pin (required for 5V protection with reverse diode)"),
         new ConfigItem("rfTransmitterPin", pinNumberInputFactory, inputApply, inputGetInt, "The GPIO pin used for the RF transmitter"),
+        new ConfigItem("rfRawMinLength", rfDataInputFactory, inputApply, inputGetInt, "Min length of rf raw data to process. Useful to drop the rf noise."),
 
         new GroupItem("Enabled RF protocols", legendFactory),
         new ConfigItem("rfProtocols", protocolInputField, protocolApply, protocolGet, ""),
@@ -201,6 +202,10 @@ $(function () {
 
     function pinNumberInputFactory(item) {
         return inputFieldNumberFactory(item, 0, 16);
+    }
+
+    function rfDataInputFactory(item) {
+        return inputFieldNumberFactory(item, 0, 256);
     }
 
     function passwordFieldFactory(item, minlength) {

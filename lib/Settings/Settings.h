@@ -78,16 +78,17 @@ class Settings {
         mqttBrokerPort(1883),
         mqttUser(""),
         mqttPassword(""),
-        mqttRetain(true),
+        mqttRetain(false),
         mqttReceiveTopic(deviceName + FPSTR(DEFAULT_RECEIVE_TOPIC_SUFFIX)),
         mqttSendTopic(deviceName + FPSTR(DEFAULT_SEND_TOPIC_SUFFIX)),
         mqttStateTopic(deviceName + FPSTR(DEFAULT_STATE_TOPIC_SUFFIX)),
         mqttVersionTopic(deviceName + FPSTR(DEFAULT_VERSION_TOPIC_SUFFIX)),
         rfEchoMessages(false),
-        rfReceiverPin(12),  // avoid 0, 2, 15, 16
-        rfTransmitterPin(4),
-        rfReceiverPinPullUp(true),
+        rfReceiverPin(4),  // avoid 0, 2, 15, 16
+        rfTransmitterPin(12),
+        rfReceiverPinPullUp(false),
         rfProtocols(FPSTR(DEFAULT_RF_PROTOCOLS)),
+        rfRawMinLength(64),
         serialLogLevel(FPSTR(DEFAULT_SERIAL_LOG_LEVEL)),
         webLogLevel(FPSTR(DEFAULT_WEB_LOG_LEVEL)),
         syslogLevel(""),
@@ -131,6 +132,7 @@ class Settings {
   int8_t rfTransmitterPin;
   bool rfReceiverPinPullUp;
   String rfProtocols;
+  int8_t rfRawMinLength;
   String serialLogLevel;
   String webLogLevel;
   String syslogLevel;

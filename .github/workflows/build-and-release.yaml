@@ -1,0 +1,53 @@
+name: Build and Release Firmware
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+      - '!v*.*.*-*'
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Install PlatformIO
+        run: |
+          pip install --quiet platformio
+          pio pkg update
+
+      - name: Build project
+        env:
+          CI: true
+          # no time to fix this now
+          PLATFORMIO_BUILD_FLAGS: -Wno-deprecated-declarations -Wno-sign-compare -Wno-overflow -Wno-format-overflow
+        run: pio run --silent
+
+      - name: Copy and list bin files
+        run: |
+          scripts/release.sh ${{ github.ref_name }}
+          ls -l dist/
+
+      - name: Create GitHub Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          gh release create "$TAG" \
+            --repo="$GITHUB_REPOSITORY" \
+            --title="${TAG}" \
+            --notes "See [CHANGELOG](CHANGELOG.md) for changes"
+
+      - name: Upload binaries to GitHub Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          for file in dist/*.bin; do
+            echo "Uploading $file"
+            gh release upload "${{ github.ref_name }}" "$file"
+          done
