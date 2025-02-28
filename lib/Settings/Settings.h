@@ -39,17 +39,9 @@
 
 #include <ArduinoJson.h>
 
-const char PROGMEM SETTINGS_FILE[] = "/settings.json";
+#include "../../src/User_config.h"
 
-const char PROGMEM DEFAULT_NAME[] = "rf434";
-const char PROGMEM DEFAULT_PASSWORD[] = "MQTT433gateway";
-const char PROGMEM DEFAULT_RECEIVE_TOPIC_SUFFIX[] = "/recv/";
-const char PROGMEM DEFAULT_SEND_TOPIC_SUFFIX[] = "/send/";
-const char PROGMEM DEFAULT_STATE_TOPIC_SUFFIX[] = "/state";
-const char PROGMEM DEFAULT_VERSION_TOPIC_SUFFIX[] = "/version";
-const char PROGMEM DEFAULT_RF_PROTOCOLS[] = "[]";
-const char PROGMEM DEFAULT_SERIAL_LOG_LEVEL[] = "debug";
-const char PROGMEM DEFAULT_WEB_LOG_LEVEL[] = "info";
+const char PROGMEM SETTINGS_FILE[] = "/settings.json";
 
 enum SettingType {
   BASE,
@@ -64,6 +56,7 @@ enum SettingType {
   _END
 };
 
+
 const size_t SETTINGS_JSON_DOC_SIZE = 4096;
 
 class Settings {
@@ -72,25 +65,25 @@ class Settings {
   using SettingCallbackFn = std::function<void(const Settings &)>;
 
   Settings()
-      : deviceName(FPSTR(DEFAULT_NAME)),
-        configPassword(FPSTR(DEFAULT_PASSWORD)),
-        mqttBroker(""),
-        mqttBrokerPort(1883),
-        mqttUser(""),
-        mqttPassword(""),
-        mqttRetain(false),
-        mqttReceiveTopic(deviceName + FPSTR(DEFAULT_RECEIVE_TOPIC_SUFFIX)),
-        mqttSendTopic(deviceName + FPSTR(DEFAULT_SEND_TOPIC_SUFFIX)),
-        mqttStateTopic(deviceName + FPSTR(DEFAULT_STATE_TOPIC_SUFFIX)),
-        mqttVersionTopic(deviceName + FPSTR(DEFAULT_VERSION_TOPIC_SUFFIX)),
+      : deviceName(TOSTRING(DEVICE_NAME)),
+        configPassword(TOSTRING(ADMIN_PASSWORD)),
+        mqttBroker(TOSTRING(MQTT_HOST)),
+        mqttBrokerPort(MQTT_PORT),
+        mqttUser(TOSTRING(MQTT_USERNAME)),
+        mqttPassword(TOSTRING(MQTT_PASSWORD)),
+        mqttRetain(MQTT_RETAIN),
+        mqttReceiveTopic(TOSTRING(MQTT_RECEIVE_TOPIC)),
+        mqttSendTopic(TOSTRING(MQTT_SEND_TOPIC)),
+        mqttStateTopic(TOSTRING(MQTT_STATE_TOPIC)),
+        mqttVersionTopic(TOSTRING(MQTT_VERSION_TOPIC)),
         rfEchoMessages(false),
-        rfReceiverPin(4),  // avoid 0, 2, 15, 16
-        rfTransmitterPin(12),
+        rfReceiverPin(RF_RX_PIN),  // avoid 0, 2, 15, 16 // why?
+        rfTransmitterPin(RF_TX_PIN),
         rfReceiverPinPullUp(false),
-        rfProtocols(FPSTR(DEFAULT_RF_PROTOCOLS)),
-        rfRawMinLength(64),
-        serialLogLevel(FPSTR(DEFAULT_SERIAL_LOG_LEVEL)),
-        webLogLevel(FPSTR(DEFAULT_WEB_LOG_LEVEL)),
+        rfProtocols(TOSTRING(RF_PROTOCOLS)),
+        rfRawMinLength(RF_RAW_MIN_LEN),
+        serialLogLevel(TOSTRING(SERIAL_LOG_LEVEL)),
+        webLogLevel(TOSTRING(WEB_LOG_LEVEL)),
         syslogLevel(""),
         syslogHost(""),
         syslogPort(514),
@@ -112,7 +105,6 @@ class Settings {
   }
   void deserialize(const String &json);
   void reset();
-  bool hasValidPassword() const;
   void registerChangeHandler(SettingType setting,
                              const SettingCallbackFn &callback);
 

@@ -204,7 +204,6 @@ Settings::SettingTypeSet Settings::applyJson(JsonDocument &parsedSettings) {
   SettingTypeSet changed;
 
   changed.set(BASE, setIfPresent(parsedSettings, JsonKey::deviceName, deviceName, notEmpty()));
-  bool pass_before = hasValidPassword();
   changed.set(WEB_CONFIG, setIfPresent(parsedSettings, JsonKey::configPassword, configPassword, notEmpty()));
   changed.set(
       MQTT, any({changed[BASE],
@@ -251,10 +250,8 @@ Settings::SettingTypeSet Settings::applyJson(JsonDocument &parsedSettings) {
               any({setIfPresent(parsedSettings, JsonKey::ledPin, ledPin),
                    setIfPresent(parsedSettings, JsonKey::ledActiveHigh, ledActiveHigh)}));
 
-  if (hasValidPassword() != pass_before) {
-    changed.set(MQTT);
-    changed.set(RF_CONFIG);
-  }
+  changed.set(MQTT);
+  changed.set(RF_CONFIG);
 
   return changed;
 }
@@ -264,9 +261,4 @@ void Settings::reset() {
     Logger.info.println(F("Remove config file."));
     SPIFFS.remove(FPSTR(SETTINGS_FILE));
   }
-}
-
-bool Settings::hasValidPassword() const {
-  return (configPassword.length() > 7) &&
-         (configPassword != FPSTR(DEFAULT_PASSWORD));
 }

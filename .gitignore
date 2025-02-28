@@ -5,9 +5,9 @@
 .piolibdeps
 .clang_complete
 .gcc-flags.json
+lib/version/version_build.h
 web/build/
 web/node_modules/
 .vscode
 TODO.md
-src/User_config.h.my
-
+user_extras.ini

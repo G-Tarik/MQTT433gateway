@@ -61,11 +61,7 @@ void setupMqtt(const Settings &) {
     mqttClient = nullptr;
     Logger.debug.println(F("MQTT instance removed."));
   }
-  if (!settings.hasValidPassword()) {
-    Logger.warning.println(
-        F("No valid config password set - do not connect to MQTT!"));
-    return;
-  }
+
   if (settings.mqttBroker.length() <= 0) {
     Logger.warning.println(F("No MQTT broker configured yet"));
     return;
@@ -85,11 +81,6 @@ void setupRf(const Settings &) {
     delete rf;
     rf = nullptr;
     Logger.debug.println(F("Rf instance removed."));
-  }
-  if (!settings.hasValidPassword()) {
-    Logger.warning.println(
-        F("No valid config password set - do not start RF handler!"));
-    return;
   }
 
   rf = new RfHandler(settings);
@@ -205,12 +196,18 @@ void setupStatusLED(const Settings &s) {
 }
 
 void setupWifi() {
-#ifdef ESPWifiManualSetup
+#ifdef WIFI_SSID
+
+  Logger.debug.println(F("Current configuration:"));
+  settings.serialize(Logger.debug, true, false);
+  Logger.debug.println();
+
   WiFi.mode(WIFI_STA);
   WiFi.hostname(settings.deviceName);
-  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
+  WiFi.begin(TOSTRING(WIFI_SSID), TOSTRING(WIFI_PASSWORD));
 
-  Logger.info.println(F("Connecting to WiFi..."));
+  Logger.info.print(F("Connecting to WiFi..."));
+  Logger.info.println(TOSTRING(WIFI_SSID));
 
   int retry = 0;
   while (WiFi.status() != WL_CONNECTED && retry < 30) {  // 30 retries (~15s timeout)
@@ -256,9 +253,7 @@ void setup() {
   if (!SPIFFS.begin()) {
     Logger.error.println(F("Initializing of SPIFFS failed!"));
   }
-#ifdef ADMIN_PASSWORD
-  settings.configPassword = FPSTR(ADMIN_PASSWORD);
-#endif
+
   settings.registerChangeHandler(STATUSLED, setupStatusLED);
   settings.registerChangeHandler(BASE, setupMdns);
   settings.registerChangeHandler(MQTT, setupMqtt);

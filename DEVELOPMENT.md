@@ -15,10 +15,14 @@ This fork will not maintain Windows support. The scripts and commands are provid
 Web frontend usually does not change often but if it is needed to rebuild then do it with (Docker is required):
 
 ```bash
-PIO_BUILD_WEB=yes pio run -e {ENV_NAME}
+pio run --target clean
+PIO_BUILD_WEB=yes pio run
 ```
 
 or build web separately before running `pio run` with the script :
 ```bash
 ./scripts/build_web.sh
 ```
+
+# Debug
+`pio device monitor -f esp8266_exception_decoder --port /dev/ttyUSB0`
