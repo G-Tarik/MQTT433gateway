@@ -56,8 +56,7 @@ enum SettingType {
   _END
 };
 
-
-const size_t SETTINGS_JSON_DOC_SIZE = 4096;
+const size_t SETTINGS_JSON_DOC_SIZE = 2048;
 
 class Settings {
  public:
@@ -69,6 +68,7 @@ class Settings {
         configPassword(TOSTRING(ADMIN_PASSWORD)),
         mqttBroker(TOSTRING(MQTT_HOST)),
         mqttBrokerPort(MQTT_PORT),
+        mqttTls(MQTT_ENABLE_TLS),
         mqttUser(TOSTRING(MQTT_USERNAME)),
         mqttPassword(TOSTRING(MQTT_PASSWORD)),
         mqttRetain(MQTT_RETAIN),
@@ -112,6 +112,7 @@ class Settings {
   String configPassword;
   String mqttBroker;
   uint16_t mqttBrokerPort;
+  bool mqttTls;
   String mqttUser;
   String mqttPassword;
   bool mqttRetain;

@@ -31,22 +31,27 @@
 #define MQTTCLIENT_H
 
 #include <WString.h>
+
 #include <WiFiClient.h>
+#include <WiFiClientSecure.h>
 
 #include <PubSubClient.h>
 
 #include <Settings.h>
+#include "ca_cert.h"
 
 #ifndef MQTT_CONNECTION_ATTEMPT_DELAY
 #define MQTT_CONNECTION_ATTEMPT_DELAY 5000
 #endif
+
+#define CA_CERT mqtt_broker_ca_cert
 
 class MqttClient {
  public:
   using RfDataCb =
       std::function<void(const String &topic_part, const String &payload)>;
 
-  MqttClient(const Settings &settings, WiFiClient &client);
+  MqttClient(const Settings &settings);
   ~MqttClient();
   void begin();
   void loop();
@@ -60,10 +65,13 @@ class MqttClient {
   void onMessage(char *topic, uint8_t *payload, unsigned int length);
   bool connect();
   bool subsrcibe();
+  void waitForTimeSync();
 
   const Settings &settings;
   RfDataCb onRfDataCallback = nullptr;
 
+  WiFiClientSecure secureClient;
+  WiFiClient plainClient;
   PubSubClient mqttClient;
   unsigned long lastConnectAttempt;
 };

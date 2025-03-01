@@ -11,5 +11,3 @@ for file in .pio/build/*/firmware.bin; do
   env=$(echo "$file" | cut -f3 -d'/')
   cp -v "$file" "dist/mqtt433gateway_${env}-${VERSION}.bin"
 done
-
-git restore lib/version/version_build.h

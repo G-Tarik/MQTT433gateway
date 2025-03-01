@@ -44,15 +44,30 @@ class PayloadString : public String {
   }
 };
 
-MqttClient::MqttClient(const Settings &settings, WiFiClient &client)
-    : settings(settings), mqttClient(client), lastConnectAttempt(0) {}
+MqttClient::MqttClient(const Settings &settings)
+    : settings(settings),
+      secureClient(), plainClient(),
+      mqttClient(settings.mqttTls ? secureClient : plainClient),
+      lastConnectAttempt(0) {}
 
 MqttClient::~MqttClient() { mqttClient.disconnect(); }
 
 void MqttClient::begin() {
   using namespace std::placeholders;
-  mqttClient.setServer(settings.mqttBroker.c_str(), settings.mqttBrokerPort);
 
+  if (settings.mqttTls) {
+    // Configure NTP and get current time
+    configTime(0, 0, "pool.ntp.org");  // UTC
+    waitForTimeSync();
+
+    Logger.info.println(F("Using MQTT over TLS with custom CA certificate"));
+    X509List *cert = new X509List(CA_CERT);
+    secureClient.setTrustAnchors(cert);
+    secureClient.setBufferSizes(256, 256);
+    secureClient.setInsecure();  // Fallback to insecure mode
+  }
+
+  mqttClient.setServer(settings.mqttBroker.c_str(), settings.mqttBrokerPort);
   mqttClient.setCallback(std::bind(&MqttClient::onMessage, this, _1, _2, _3));
 
   reconnect();
@@ -96,6 +111,10 @@ void MqttClient::reconnect() {
       }
     } else {
       Logger.error.println(F("MQTT connect failed!"));
+      if (settings.mqttTls) {
+        Logger.error.print(F("SSL Error: "));
+        Logger.error.println(secureClient.getLastSSLError());
+      }
     }
   }
 
@@ -150,3 +169,20 @@ void MqttClient::publishCode(const String &protocol, const String &payload) {
 }
 
 bool MqttClient::isConnected() { return mqttClient.connected(); }
+
+void MqttClient::waitForTimeSync() {
+  Logger.info.print(F("Wait for NTP sync"));
+  time_t now = time(nullptr);
+  while (now < 8 * 3600 * 2) {
+    delay(500);
+    Logger.info.print(F("."));
+    now = time(nullptr);
+  }
+  struct tm timeinfo;
+  gmtime_r(&now, &timeinfo);
+
+  char buffer[20];  // Buffer for formatted time
+  strftime(buffer, sizeof(buffer), "%Y/%m/%d %H:%M:%S", &timeinfo);
+
+  Logger.info.println(buffer);
+}

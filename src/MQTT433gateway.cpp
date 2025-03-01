@@ -44,7 +44,6 @@
 #include <SystemLoad.h>
 #include "User_config.h"
 
-WiFiClient wifi;
 
 Settings settings;
 ConfigWebServer *webServer = nullptr;
@@ -67,7 +66,7 @@ void setupMqtt(const Settings &) {
     return;
   }
 
-  mqttClient = new MqttClient(settings, wifi);
+  mqttClient = new MqttClient(settings);
   mqttClient->registerRfDataHandler(
       [](const String &protocol, const String &data) {
         if (rf) rf->transmitCode(protocol, data);
@@ -310,6 +309,9 @@ void setup() {
   Logger.debug.println();
   Logger.info.print(F("Listen on IP: "));
   Logger.info.println(WiFi.localIP());
+
+  // temporary for debugging OOM
+  systemHeap = new SystemHeap(Logger.info, 5000U);
 }
 
 void loop() {

@@ -37,30 +37,31 @@
 #include "Settings.h"
 
 namespace JsonKey {
-char deviceName[] = "deviceName";
-char configPassword[] = "configPassword";
-char mqttBroker[] = "mqttBroker";
-char mqttBrokerPort[] = "mqttBrokerPort";
-char mqttUser[] = "mqttUser";
-char mqttPassword[] = "mqttPassword";
-char mqttRetain[] = "mqttRetain";
-char mqttReceiveTopic[] = "mqttReceiveTopic";
-char mqttSendTopic[] = "mqttSendTopic";
-char mqttStateTopic[] = "mqttStateTopic";
-char mqttVersionTopic[] = "mqttVersionTopic";
-char rfEchoMessages[] = "rfEchoMessages";
-char rfReceiverPin[] = "rfReceiverPin";
-char rfTransmitterPin[] = "rfTransmitterPin";
-char rfReceiverPinPullUp[] = "rfReceiverPinPullUp";
-char rfProtocols[] = "rfProtocols";
-char rfRawMinLength[] = "rfRawMinLength";
-char serialLogLevel[] = "serialLogLevel";
-char webLogLevel[] = "webLogLevel";
-char syslogLevel[] = "syslogLevel";
-char syslogHost[] = "syslogHost";
-char syslogPort[] = "syslogPort";
-char ledPin[] = "ledPin";
-char ledActiveHigh[] = "ledActiveHigh";
+constexpr char deviceName[] = "deviceName";
+constexpr char configPassword[] = "configPassword";
+constexpr char mqttBroker[] = "mqttBroker";
+constexpr char mqttBrokerPort[] = "mqttBrokerPort";
+constexpr char mqttTls[] = "mqttTls";
+constexpr char mqttUser[] = "mqttUser";
+constexpr char mqttPassword[] = "mqttPassword";
+constexpr char mqttRetain[] = "mqttRetain";
+constexpr char mqttReceiveTopic[] = "mqttReceiveTopic";
+constexpr char mqttSendTopic[] = "mqttSendTopic";
+constexpr char mqttStateTopic[] = "mqttStateTopic";
+constexpr char mqttVersionTopic[] = "mqttVersionTopic";
+constexpr char rfEchoMessages[] = "rfEchoMessages";
+constexpr char rfReceiverPin[] = "rfReceiverPin";
+constexpr char rfTransmitterPin[] = "rfTransmitterPin";
+constexpr char rfReceiverPinPullUp[] = "rfReceiverPinPullUp";
+constexpr char rfProtocols[] = "rfProtocols";
+constexpr char rfRawMinLength[] = "rfRawMinLength";
+constexpr char serialLogLevel[] = "serialLogLevel";
+constexpr char webLogLevel[] = "webLogLevel";
+constexpr char syslogLevel[] = "syslogLevel";
+constexpr char syslogHost[] = "syslogHost";
+constexpr char syslogPort[] = "syslogPort";
+constexpr char ledPin[] = "ledPin";
+constexpr char ledActiveHigh[] = "ledActiveHigh";
 }  // namespace JsonKey
 
 static inline bool any(std::initializer_list<bool> items) {
@@ -163,6 +164,7 @@ void Settings::doSerialize(JsonDocument &root, bool sensible) const {
   root[JsonKey::deviceName] = this->deviceName;
   root[JsonKey::mqttBroker] = this->mqttBroker;
   root[JsonKey::mqttBrokerPort] = this->mqttBrokerPort;
+  root[JsonKey::mqttTls] = this->mqttTls;
   root[JsonKey::mqttUser] = this->mqttUser;
   root[JsonKey::mqttRetain] = this->mqttRetain;
   root[JsonKey::mqttReceiveTopic] = this->mqttReceiveTopic;
@@ -209,6 +211,7 @@ Settings::SettingTypeSet Settings::applyJson(JsonDocument &parsedSettings) {
       MQTT, any({changed[BASE],
                  setIfPresent(parsedSettings, JsonKey::mqttBroker, mqttBroker, notEmpty()),
                  setIfPresent(parsedSettings, JsonKey::mqttBrokerPort, mqttBrokerPort, notZero<uint16_t>()),
+                 setIfPresent(parsedSettings, JsonKey::mqttTls, mqttTls),
                  setIfPresent(parsedSettings, JsonKey::mqttUser, mqttUser),
                  setIfPresent(parsedSettings, JsonKey::mqttPassword, mqttPassword, notEmpty()),
                  setIfPresent(parsedSettings, JsonKey::mqttRetain, mqttRetain),

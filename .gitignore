@@ -11,3 +11,4 @@ web/node_modules/
 .vscode
 TODO.md
 user_extras.ini
+flash.sh

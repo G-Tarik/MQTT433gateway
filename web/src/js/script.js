@@ -40,6 +40,7 @@ $(function () {
         new ConfigItem("mqttBrokerPort", portNumberInputFactory, inputApply, inputGetInt, "MQTT Broker port"),
         new ConfigItem("mqttUser", inputFieldFactory, inputApply, inputGet, "MQTT username (optional)"),
         new ConfigItem("mqttPassword", passwordFieldFactory, inputApply, inputGet, "MQTT password (optional)"),
+        new ConfigItem("mqttTls", checkboxFactory, checkboxApply, checkboxGet, "Enable TLS for MQTT"),
         new ConfigItem("mqttRetain", checkboxFactory, checkboxApply, checkboxGet, "Retain MQTT messages"),
 
         new GroupItem("MQTT Topic Config", legendFactory),
@@ -168,11 +169,11 @@ $(function () {
     }
 
     function deviceNameInputFactory(item) {
-        return inputFieldFactory(item, '[.-_A-Za-z0-9]+', true);
+        return inputFieldFactory(item, '[-._A-Za-z0-9]+', true);
     }
 
     function hostNameInputFactory(item) {
-        return inputFieldFactory(item, '[.-_A-Za-z0-9]*');
+        return inputFieldFactory(item, '[-._A-Za-z0-9]*');
     }
 
     function mqttTopicInputFactory(item) {

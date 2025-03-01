@@ -1,7 +1,6 @@
 #ifndef user_config_h
 #define user_config_h
 
-
 #define STRINGIFY(x) #x
 #define TOSTRING(x) STRINGIFY(x)
 
@@ -10,15 +9,14 @@ These parameters can be defined as build flags in user_extras.ini
 */
 
 
-// apply custom wifi settings and disable WiFiManager initial portal
-#ifndef WIFI_SSID
-#define WIFI_SSID exampleSSID
-#endif
+// uncomment or specify as build flags to apply custom wifi settings
+// if these are not defined then default WiFiManager portal will start with ADMIN_PASSWORD
+// #define WIFI_SSID exampleSSID
+// #define WIFI_PASSWORD example_password
 
-#ifndef WIFI_PASSWORD
-#define WIFI_PASSWORD example_password
-#endif
 
+//#define WIFI_SSID "exampleSSID"
+//#define WIFI_PASSWORD "example_password"
 
 #ifndef DEVICE_NAME
 #define DEVICE_NAME rf434
@@ -74,6 +72,10 @@ These parameters can be defined as build flags in user_extras.ini
 
 #ifndef MQTT_PORT
 #define MQTT_PORT 1883
+#endif
+
+#ifndef MQTT_ENABLE_TLS
+#define MQTT_ENABLE_TLS false
 #endif
 
 #ifndef MQTT_USERNAME
