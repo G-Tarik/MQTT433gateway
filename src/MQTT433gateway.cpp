@@ -128,7 +128,7 @@ void setupWebServer() {
   });
   webServer->registerProtocolProvider(RfHandler::availableProtocols);
   webServer->registerOtaHook([]() {
-    Logger.debug.println(F("Prepare for oat update."));
+    Logger.debug.println(F("Prepare for ota update."));
     if (statusLED) statusLED->setState(StatusLED::ota);
     if (rf) {
       rf->filterProtocols(F("[]"));
@@ -171,19 +171,6 @@ void setupWebServer() {
   Logger.info.println(F("WebServer instance created."));
 
   setupWebLog();
-}
-
-void setupMdns(const Settings &s) {
-  if (0 == settings.deviceName.length()) {
-    return;
-  }
-  MDNS.close();
-  if (!MDNS.begin(settings.deviceName.c_str())) {
-    Logger.error.println(F("Error setting up MDNS responder"));
-    return;
-  }
-  MDNS.addService("http", "tcp", 80);
-  Logger.info.println(F("MDNS service registered."));
 }
 
 void setupStatusLED(const Settings &s) {
@@ -255,7 +242,6 @@ void setup() {
   }
 
   settings.registerChangeHandler(STATUSLED, setupStatusLED);
-  settings.registerChangeHandler(BASE, setupMdns);
   settings.registerChangeHandler(MQTT, setupMqtt);
   settings.registerChangeHandler(RF_ECHO, [](const Settings &s) {
     Logger.debug.println(F("Configure rfEchoMessages."));
@@ -336,8 +322,6 @@ void loop() {
     statusLED->loop();
   }
 
-  MDNS.update();
-
   if (webServer) {
     webServer->loop();
   }
@@ -356,4 +340,5 @@ void loop() {
   if (systemHeap) {
     systemHeap->loop();
   }
+
 }

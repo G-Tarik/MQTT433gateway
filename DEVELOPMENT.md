@@ -4,7 +4,8 @@ Using already exiting PlatformIO Core. Despite all the correct extension setting
 To make IDE work close vscode, remove directory `.vscode` in the current project then run
 ```bash
 pio pkg update
-pio init --ide vscode
+# init or update existing
+pio project init --ide vscode
 ```
 Identify this line https://github.com/platformio/platformio-vscode-ide/blob/3af388134660f5c347be18686cbd349cca91c235/src/main.js#L64  in the
 ~/.vscode/extensions/platformio.platformio-ide-3.3.4-linux-x64/dist/extension.js  and remove `await this.startInstaller(!hasPIOProject);`
@@ -24,5 +25,5 @@ or build web separately before running `pio run` with the script :
 ./scripts/build_web.sh
 ```
 
-# Debug
+# Debug via Serial log
 `pio device monitor -f esp8266_exception_decoder --port /dev/ttyUSB0`

@@ -1,3 +1,5 @@
+; see src/User_config.h for available settings
+
 [user_extras]
 build_flags =
   -D ADMIN_PASSWORD=MQTT433gateway
