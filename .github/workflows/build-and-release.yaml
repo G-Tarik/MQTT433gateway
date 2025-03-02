@@ -26,7 +26,9 @@ jobs:
           CI: true
           # no time to fix this now
           PLATFORMIO_BUILD_FLAGS: -Wno-deprecated-declarations -Wno-sign-compare -Wno-overflow -Wno-format-overflow
-        run: pio run --silent
+        run: |
+          cp user_extras.ini{.default,}
+          pio run --silent
 
       - name: Copy and list bin files
         run: |
