@@ -31,6 +31,10 @@
 
 #include "Heartbeat.h"
 
+#ifndef LED_HEARTBEAT_INTERVAL
+#define LED_HEARTBEAT_INTERVAL 100
+#endif
+
 Heartbeat::Heartbeat(LED& led, unsigned int interval)
     : _led(led), _interval(interval) {
   off();
@@ -52,6 +56,7 @@ void Heartbeat::off() {
 
 void Heartbeat::loop() {
   unsigned long now = millis();
+  // fixme: changing interval here does not change anything on led
   if ((now - _last) >= _interval) {
     beatStep();
     _last = now;
@@ -62,5 +67,5 @@ void Heartbeat::beatStep() {
   if (_tick <= 3) {
     _led.setState(!(_tick % 2));
   }
-  _tick = (_tick + 1) % 10;
+  _tick = (_tick + 1) % LED_HEARTBEAT_INTERVAL;
 }
