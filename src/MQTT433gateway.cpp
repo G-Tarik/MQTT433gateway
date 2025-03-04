@@ -44,7 +44,6 @@
 #include <SystemLoad.h>
 #include "User_config.h"
 
-
 Settings settings;
 ConfigWebServer *webServer = nullptr;
 MqttClient *mqttClient = nullptr;

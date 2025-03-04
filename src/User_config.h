@@ -1,7 +1,7 @@
 #ifndef user_config_h
 #define user_config_h
 
-#define STRINGIFY(x) #x
+#define STRINGIFY(...) #__VA_ARGS__
 #define TOSTRING(x) STRINGIFY(x)
 
 /*
