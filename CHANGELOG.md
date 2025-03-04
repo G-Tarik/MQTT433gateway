@@ -1,7 +1,7 @@
 # Changelog
 
 
-## v2025.3.14
+## v2025.3.4
 - Make settings easier to configure on build time
 - Remove Mdns feature to save memory. High RAM usage is a bottleneck for MQTT TLS feature
 - Implementation of MQTT TLS. Known issues:
