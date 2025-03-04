@@ -8,7 +8,6 @@
 These parameters can be defined as build flags in user_extras.ini
 */
 
-
 // uncomment or specify as build flags to apply custom wifi settings
 // if these are not defined then default WiFiManager portal will start with ADMIN_PASSWORD
 // #define WIFI_SSID exampleSSID

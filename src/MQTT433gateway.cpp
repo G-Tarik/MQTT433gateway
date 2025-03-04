@@ -251,7 +251,7 @@ void setup() {
     }
   });
   settings.registerChangeHandler(RF_PROTOCOL, [](const Settings &s) {
-    Logger.debug.println(F("Configure rfProtocols."));
+    Logger.debug.println(F("Apply changes to rfProtocols."));
     if (rf) {
       rf->filterProtocols(s.rfProtocols);
     } else {
@@ -311,7 +311,7 @@ void setup() {
   Logger.info.println(WiFi.localIP());
 
   // temporary for debugging OOM
-  systemHeap = new SystemHeap(Logger.info, 5000U);
+  systemHeap = new SystemHeap(Logger.info, 5000);
 }
 
 void loop() {

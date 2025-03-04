@@ -24,7 +24,7 @@
 #define ICACHE_RAM_ATTR IRAM_ATTR
 #endif
 
-#ifdef DEBUG
+#ifdef ESPILIGHT_DEBUG
 #define Debug(x) Serial.print(x)
 #define DebugLn(x) Serial.println(x)
 #else
@@ -622,7 +622,7 @@ void ESPiLight::limitProtocols(const String &protos) {
     new_node->next = used_protocols;
     used_protocols = new_node;
 
-    Debug("activated protocol ");
+    Debug("activated protocol: ");
     DebugLn(templ->listener->id);
     proto_count++;
 
