@@ -16,8 +16,8 @@
 	along with pilight. If not, see	<http://www.gnu.org/licenses/>
 */
 
-#ifndef _PROTOCOL_NINJABLOCKS_WEATHER_H_
-#define _PROTOCOL_NINJABLOCKS_WEATHER_H_
+#ifdef _PROTOCOL_NINJABLOCKS_WEATHER_H_
+// #define _PROTOCOL_NINJABLOCKS_WEATHER_H_
 
 #include "../protocol.h"
 

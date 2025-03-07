@@ -15,6 +15,7 @@
 	You should have received a copy of the GNU General Public License
 	along with pilight. If not, see	<http://www.gnu.org/licenses/>
 */
+#ifdef _PROTOCOL_QUIGG_SCREEN_H_
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -316,4 +317,6 @@ void compatibility(struct module_t *module) {
 void init(void) {
 	quiggScreenInit();
 }
+#endif
+
 #endif

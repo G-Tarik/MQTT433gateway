@@ -16,6 +16,8 @@
 	along with pilight. If not, see	<http://www.gnu.org/licenses/>
 */
 
+#ifdef _PROTOCOL_QUIGG_GT7000_H_
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -299,4 +301,6 @@ void compatibility(struct module_t *module) {
 void init(void) {
 	quiggGT7000Init();
 }
+#endif
+
 #endif

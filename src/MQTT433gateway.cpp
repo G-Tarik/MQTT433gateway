@@ -27,6 +27,8 @@
   SOFTWARE.
 */
 
+#include "User_config.h"
+
 #include <ESP8266httpUpdate.h>
 #include <ESP8266mDNS.h>
 #include <FS.h>
@@ -42,7 +44,6 @@
 #include <SyslogLogTarget.h>
 #include <SystemHeap.h>
 #include <SystemLoad.h>
-#include "User_config.h"
 
 Settings settings;
 ConfigWebServer *webServer = nullptr;

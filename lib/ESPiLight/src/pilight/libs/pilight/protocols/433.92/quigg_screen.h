@@ -16,8 +16,8 @@
 	along with pilight. If not, see	<http://www.gnu.org/licenses/>
 */
 
-#ifndef _PROTOCOL_QUIGG_SCREEN_H_
-#define _PROTOCOL_QUIGG_SCREEN_H_
+#ifdef _PROTOCOL_QUIGG_SCREEN_H_
+// #define _PROTOCOL_QUIGG_SCREEN_H_
 
 #include "../protocol.h"
 

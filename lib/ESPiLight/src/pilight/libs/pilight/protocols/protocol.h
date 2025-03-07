@@ -62,9 +62,9 @@ typedef enum {
 
 typedef struct protocol_t {
   char *id;
-  uint8_t rawlen;
-  uint8_t minrawlen;
-  uint8_t maxrawlen;
+  uint16_t rawlen;
+  uint16_t minrawlen;
+  uint16_t maxrawlen;
   uint16_t mingaplen;
   uint16_t maxgaplen;
   uint8_t txrpt;

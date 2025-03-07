@@ -16,6 +16,8 @@
 	along with pilight. If not, see	<http://www.gnu.org/licenses/>
 */
 
+#ifdef _PROTOCOL_NINJABLOCKS_WEATHER_H_
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -246,3 +248,4 @@ void init(void) {
 }
 #endif
 
+#endif

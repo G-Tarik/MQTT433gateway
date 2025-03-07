@@ -20,7 +20,7 @@
 #include "tfa2017.h"
 
 #define MIN_PULSE_LENGTH	250
-#define AVG_PULSE		750
+#define AVG_PULSE		    750
 #define MIN_RAW_LENGTH		200
 #define MAX_RAW_LENGTH		400
 #define MESSAGE_LENGTH		48

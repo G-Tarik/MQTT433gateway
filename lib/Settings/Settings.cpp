@@ -129,7 +129,8 @@ void Settings::load() {
       Logger.error.println(F("Open settings file for read failed!"));
       return;
     }
-    DynamicJsonDocument jsonDoc(SETTINGS_JSON_DOC_SIZE);
+    // DynamicJsonDocument jsonDoc(SETTINGS_JSON_DOC_SIZE);
+    JsonDocument jsonDoc;
     DeserializationError error = deserializeJson(jsonDoc, file);
     if (error) {
       logJsonDeserializationError(error);
@@ -192,7 +193,8 @@ void Settings::doSerialize(JsonDocument &root, bool sensible) const {
 }
 
 void Settings::deserialize(const String &json) {
-  DynamicJsonDocument jsonDoc(SETTINGS_JSON_DOC_SIZE);
+  // DynamicJsonDocument jsonDoc(SETTINGS_JSON_DOC_SIZE);
+  JsonDocument jsonDoc;
   DeserializationError error = deserializeJson(jsonDoc, json);
   if (error) {
     logJsonDeserializationError(error);

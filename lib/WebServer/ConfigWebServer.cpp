@@ -132,9 +132,9 @@ void ConfigWebServer::onConfigGet() {
 
 void ConfigWebServer::onSystemCommand() {
   Logger.debug.println(F("Webserver: system POST"));
-  DynamicJsonDocument jsonDoc(1024);
-  DeserializationError error =
-      deserializeJson(jsonDoc, server.arg(FPSTR(PLAIN)));
+  // DynamicJsonDocument jsonDoc(1024);
+  JsonDocument jsonDoc;
+  DeserializationError error = deserializeJson(jsonDoc, server.arg(FPSTR(PLAIN)));
 
   if (error) {
     server.send_P(400, TEXT_PLAIN, PSTR("Cannot parse command!"));
@@ -161,9 +161,9 @@ void ConfigWebServer::onSystemCommand() {
 
 void ConfigWebServer::onDebugFlagSet() {
   Logger.debug.println(F("Webserver: debug PUT"));
-  DynamicJsonDocument jsonDoc(1024);
-  DeserializationError error =
-      deserializeJson(jsonDoc, server.arg(FPSTR(PLAIN)));
+  // DynamicJsonDocument jsonDoc(1024);
+  JsonDocument jsonDoc;
+  DeserializationError error = deserializeJson(jsonDoc, server.arg(FPSTR(PLAIN)));
 
   if (!error) {
     for (const auto& debugFlagHandler : debugFlagHandlers) {
@@ -183,7 +183,8 @@ void ConfigWebServer::onDebugFlagSet() {
 }
 
 void ConfigWebServer::onDebugFlagGet() {
-  DynamicJsonDocument jsonDoc(1024);
+  // DynamicJsonDocument jsonDoc(1024);
+  JsonDocument jsonDoc;
 
   for (const auto& debugFlagHandler : debugFlagHandlers) {
     jsonDoc[debugFlagHandler.name] = debugFlagHandler.getState();

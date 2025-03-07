@@ -95,7 +95,8 @@ class Settings {
   void notifyAll();
   template <typename T>
   void serialize(T &target, bool pretty, bool sensible = true) const {
-    DynamicJsonDocument jsonDoc(SETTINGS_JSON_DOC_SIZE);
+    // DynamicJsonDocument jsonDoc(SETTINGS_JSON_DOC_SIZE);
+    JsonDocument jsonDoc;
     doSerialize(jsonDoc, sensible);
     if (pretty) {
       serializeJsonPretty(jsonDoc, target);
@@ -125,7 +126,7 @@ class Settings {
   int8_t rfTransmitterPin;
   bool rfReceiverPinPullUp;
   String rfProtocols;
-  int8_t rfRawMinLength;
+  uint8_t rfRawMinLength;
   String serialLogLevel;
   String webLogLevel;
   String syslogLevel;
